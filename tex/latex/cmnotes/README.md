@@ -1,4 +1,5 @@
-## `cmnotes` -- For typesetting lecture notes
+# `cmnotes`
+## Latex package for typesetting lecture notes
 
 Cardiff Maths, 2017/12/31
 

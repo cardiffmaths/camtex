@@ -11,3 +11,15 @@ See the documentation for usage.
 
 History:
 * v1.0 (2017/12/31) Initial version
+
+## Installation
+The following with produce 
+- `cmnotes.sty` (latex package)
+- `cmnotes.pdf` (documentation)
+```bash
+$latex cmnotes.ins
+$latex cmnotes.dtx
+$latex cmnotes.dtx
+$makeindex -s gind.ist -o cmnotes.ind cmnotes.idx
+$latex cmnotes.dtx
+```

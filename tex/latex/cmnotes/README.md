@@ -13,7 +13,7 @@ History:
 * v1.0 (2017/12/31) Initial version
 
 ## Installation
-The following with produce `cmnotes.sty` (latex package) and `cmnotes.pdf` (documentation).
+The following will produce `cmnotes.sty` (latex package) and `cmnotes.pdf` (documentation).
 ```bash
 $latex cmnotes.ins
 $latex cmnotes.dtx

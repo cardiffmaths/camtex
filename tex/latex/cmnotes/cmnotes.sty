@@ -1,0 +1,539 @@
+%%
+%% This is file `cmnotes.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% cmnotes.dtx  (with options: `package')
+%% 
+%% Copyright (C) 2017 by Cardiff Maths
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.3 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%% 
+%%     http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3 or later is part of all distributions of
+%% LaTeX version 2005/12/01 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}[2005/12/01]
+\ProvidesPackage{cmnotes}[2017/12/31 v1.0 For typesetting lecture notes (Cardiff Maths)]
+ %\end{center}
+
+%% Declare and process options
+\newif\if@noproofs\@noproofsfalse
+\DeclareOption{noproofs}{\@noproofstrue}
+\newif\if@blankproofs\@blankproofsfalse
+\DeclareOption{blankproofs}{\@blankproofstrue}
+
+\newif\if@nosolutions\@nosolutionsfalse
+\DeclareOption{nosolutions}{\@nosolutionstrue}
+\newif\if@blanksolutions\@blanksolutionsfalse
+\DeclareOption{blanksolutions}{\@blanksolutionstrue}
+
+\newif\if@noanswers\@noanswersfalse
+\DeclareOption{noanswers}{\@noanswerstrue}
+\newif\if@blankanswers\@blankanswersfalse
+\DeclareOption{blankanswers}{\@blankanswerstrue}
+
+\newif\if@blanktext\@blanktextfalse
+\DeclareOption{blanktext}{\@blanktexttrue}
+
+\newif\if@blankimages\@blankimagesfalse
+\DeclareOption{blankimages}{\@blankimagestrue}
+\newif\if@blankallimages\@blankallimagesfalse
+\DeclareOption{blankallimages}{\@blankallimagestrue}
+
+\newif\if@student\@studentfalse
+\DeclareOption{student}{%
+\@noanswerstrue
+\@blankproofstrue
+\@blanksolutionstrue
+\@blanktexttrue
+\@blankimagestrue
+}
+\ProcessOptions
+\relax
+%% Type out some useful information
+\typeout{---------------------}
+\if@noproofs\typeout{No Proofs}\fi
+\if@noanswers\typeout{No Answers}\fi
+\if@blankproofs\typeout{Blank Proofs}\fi
+\if@blanksolutions\typeout{Blank Solutions}\fi
+\typeout{---------------------}
+%% Load all required packages
+\RequirePackage{amsmath,amsfonts,amssymb}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{newfloat}
+\RequirePackage{caption}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{comment}
+\RequirePackage{environ}
+\RequirePackage{setspace}
+\RequirePackage{etoolbox}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable}
+\tcbuselibrary{skins}
+%% Set entity names (override these with culang.sty)
+\let\proofname\@undefined
+\newcommand{\proofname}{Proof}
+\newcommand{\questionname}{Question}
+\newcommand{\answername}{Answer}
+\newcommand{\solutionname}{Solution}
+\newcommand{\quizname}{Quiz}
+\newcommand{\responsename}{Response}
+%% Set default colours
+\newcommand{\cmnotes@HideColour}{white}
+\newcommand{\cmnotes@TextColour}{black}
+\newcommand{\cmnotes@ShowColour}{black}
+\newcommand{\cmnotes@ProofColour}{black}
+\newcommand{\cmnotes@SolutionColour}{black}
+\newcommand{\cmnotes@AnswerColour}{black}
+\newcommand{\cmnotes@ResponseColour}{black}
+\newcommand{\cmnotes@NextColour}{black}
+\AtBeginDocument{
+\color{\cmnotes@TextColour}
+}
+%% Commands for setting custom colours
+\newcommand{\hidecolour}[1]{\renewcommand{\cmnotes@HideColour}{#1}}
+\newcommand{\textcolour}[1]{\renewcommand{\cmnotes@TextColour}{#1}}
+\newcommand{\showcolour}[1]{\renewcommand{\cmnotes@ShowColour}{#1}}
+\newcommand{\proofcolour}[1]{\renewcommand{\cmnotes@ProofColour}{#1}}
+\newcommand{\solutioncolour}[1]{\renewcommand{\cmnotes@SolutionColour}{#1}}
+\newcommand{\answercolour}[1]{\renewcommand{\cmnotes@AnswerColour}{#1}}
+\newcommand{\responsecolour}[1]{\renewcommand{\cmnotes@ResponseColour}{#1}}
+\newcommand{\hideon}{
+\if@blankimages
+\@blankimagesnowtrue
+\@blanktikz
+\fi
+\color{\cmnotes@NextColour}
+}
+\newcommand{\hideoff}{
+\if@blankallimages
+\null
+\else
+\@blankimagesnowfalse
+\@fixtikz
+\fi
+}
+\newcommand{\blankson}{\hideon}
+\newcommand{\blanksoff}{\hideoff}
+\newcommand{\cmnotes@StretchFactor}{1}
+\newcommand{\setstretchfactor}[1]{\renewcommand{\cmnotes@StretchFactor}{#1}}
+\newcommand{\cmnotesboxtitle}{}
+\newenvironment{cmnotesbox}{%
+\par
+\vspace*{\parskip}
+\hideon
+\begin{tcolorbox}[
+breakable,
+notitle,
+boxrule=0.5pt,
+colback=white,
+before={\@fixtikz},
+after={\hideoff},
+coltext={\cmnotes@NextColour},
+skin=enhanced,
+height fixed for = first and middle,
+ignore nobreak
+]
+\textcolor{\cmnotes@TextColour}{\noindent\cmnotesboxtitle}
+\begingroup
+}{
+\endgroup
+\hideoff
+\end{tcolorbox}
+}
+\AfterEndEnvironment{cmnotesbox}{\hideoff}
+\if@nosolutions
+\excludecomment{solution}
+\else
+\newcommand{\solutiontitle}{\noindent\textbf{\solutionname:}\enspace}
+\newenvironment{solution}{
+\renewcommand{\cmnotesboxtitle}{\solutiontitle}
+\if@blanksolutions
+\renewcommand{\cmnotes@NextColour}{\cmnotes@HideColour}
+\setstretch{\cmnotes@StretchFactor}
+\else
+\renewcommand{\cmnotes@NextColour}{\cmnotes@SolutionColour}
+\setstretch{1}
+\fi
+\begin{cmnotesbox}
+}{
+\end{cmnotesbox}
+}
+\fi
+\let\proof\@undefined
+\let\endproof\@undefined
+\if@noproofs
+\excludecomment{proof}
+\else
+\newcommand{\prooftitle}{\noindent\textbf{\proofname:}\enspace}
+\newenvironment{proof}{
+\renewcommand{\cmnotesboxtitle}{\prooftitle}
+\if@blankproofs
+\renewcommand{\cmnotes@NextColour}{\cmnotes@HideColour}
+\else
+\renewcommand{\cmnotes@NextColour}{\cmnotes@ProofColour}
+\fi
+\begin{cmnotesbox}
+}{
+\end{cmnotesbox}
+}
+\fi
+\newenvironment{blankbox}{
+\renewcommand{\cmnotesboxtitle}{}
+\if@blanktext
+\renewcommand{\cmnotes@NextColour}{\cmnotes@HideColour}
+\setstretch{\cmnotes@StretchFactor}
+\else
+\renewcommand{\cmnotes@NextColour}{\cmnotes@ShowColour}
+\setstretch{1}
+\fi
+\begin{cmnotesbox}
+}{
+\end{cmnotesbox}
+}
+\newcommand{\answertitle}{\noindent\textbf{\answername:}\enspace}
+\NewEnviron{answer}{%
+\if@noanswers\else%
+\renewcommand{\cmnotesboxtitle}{\answertitle}
+\if@blankanswers
+\renewcommand{\cmnotes@NextColour}{\cmnotes@HideColour}
+\setstretch{\cmnotes@StretchFactor}
+\else
+\renewcommand{\cmnotes@NextColour}{\cmnotes@AnswerColour}
+\setstretch{1}
+\fi
+\begin{cmnotesbox}
+\BODY
+\end{cmnotesbox}
+\fi%
+}{}
+\newcommand{\prf}[1]{\begin{proof}{#1}\end{proof}}
+\newcommand{\sol}[1]{\begin{solution}{#1}\end{solution}}
+\newcommand{\ans}[1]{\begin{answer}{#1}\end{answer}}
+\newcommand{\bbx}[1]{\begin{blankbox}{#1}\end{blankbox}}
+\newif\if@globalnoanswers\@globalnoanswersfalse
+\newif\if@globalblankanswers\@globalblankanswersfalse
+\if@noanswers
+\@globalnoanswerstrue
+\fi
+\if@blankanswers
+\@globalblankanswerstrue
+\fi
+\newenvironment{answerson}{
+\@noanswersfalse
+\@blankanswersfalse
+\begingroup
+}{
+\endgroup
+\if@globalnoanswers\@noanswerstrue\else\@noanswersfalse\fi
+\if@globalblankanswers\@blankanswerstrue\else\@blankanswersfalse\fi
+}
+\newenvironment{answersoff}{
+\@noanswerstrue
+\begingroup
+}{
+\endgroup
+\if@globalnoanswers\@noanswerstrue\else\@noanswersfalse\fi
+}
+\newcommand{\cmnotes@ScaleHiddenImages}{1.5}
+\newcommand{\setscaleimages}[1]{\renewcommand{\cmnotes@ScaleHiddenImages}{#1}}
+\newif\if@blankimagesnow
+\if@blankallimages
+\@blankimagesnowtrue
+\fi
+\let\oldincludegraphics=\includegraphics
+\renewcommand\includegraphics[2][]{
+\if@blankimagesnow
+\scalebox{\cmnotes@ScaleHiddenImages}{
+\phantom{\oldincludegraphics[#1]{#2}}
+}
+\else
+\oldincludegraphics[#1]{#2}
+\fi
+}
+\if@blankimagesnow
+\tikzset{
+every picture/.append style={%
+scale=\cmnotes@ScaleHiddenImages,
+execute at end picture={\draw[fill=white,rounded corners=5pt] (current bounding box.south west) rectangle (current bounding box.north east);}
+}
+}
+\fi
+\newcommand{\@blanktikz}{
+\if@blankimagesnow
+\tikzset{
+every picture/.append style={%
+scale=\cmnotes@ScaleHiddenImages,
+execute at end picture={\draw[gray!20,thick,fill=white] (current bounding box.south west) rectangle (current bounding box.north east);}
+}
+}
+\fi
+}
+\newcommand{\@fixtikz}{
+\tikzset{
+every picture/.style={}
+}
+}
+\newcommand{\blankgraphics}[2][scale=1]{
+\if@blankimages
+\scalebox{\cmnotes@ScaleHiddenImages}{\phantom{\oldincludegraphics[#1]{#2}}}
+\else
+\oldincludegraphics[#1]{#2}
+\fi
+}
+\newlength\imageheight
+\newlength\imagewidth
+\newcommand{\altgraphics}[3][scale=1]{
+\if@blankimages
+\settoheight{\imageheight}{\oldincludegraphics[#1]{#2}}
+\settowidth{\imagewidth}{\oldincludegraphics[#1]{#2}}
+\scalebox{\cmnotes@ScaleHiddenImages}{
+\oldincludegraphics[height=\imageheight,width=\imagewidth,keepaspectratio]{#3}
+}
+\else
+\oldincludegraphics[#1]{#2}
+\fi
+}
+\newcommand{\hidegraphics}[2][scale=1]{
+\if@blankimages
+\oldincludegraphics[#1]{#2}
+\else
+\null
+\fi
+}
+\newcommand{\showgraphics}[2][scale=1]{
+\if@blankimages
+\null
+\else
+\oldincludegraphics[#1]{#2}
+\fi
+}
+%% Commands to define symbols for choices and checkboxes
+\newcommand{\choicechar}[1]{\def\choice@char{#1}}
+\newcommand{\chosenchar}[1]{\def\chosen@char{#1}}
+\newcommand{\checkboxchar}[1]{\def\checkbox@char{#1}}
+\newcommand{\checkedchar}[1]{\def\checked@char{#1}}
+%% Set default symbols
+\newcommand{\bigsquare}{\raisebox{0.5ex}{\fbox{\phantom{\rule{0.5ex}{0.5ex}}}}}
+\choicechar{$\bigcirc$}
+\chosenchar{$\text{\rlap{\,$\checkmark$}}\bigcirc$}
+\checkboxchar{$\bigsquare$}
+\checkedchar{$\text{\rlap{\,\!$\checkmark$}}\bigsquare$}
+%% Hooks (for customization)
+\newcommand\questionshook{}
+\newcommand\partshook{}
+\newcommand\subpartshook{}
+\newcommand\subsubpartshook{}
+\newcommand\choiceshook{}
+\newcommand\checkboxeshook{}
+%% Counters
+\newcounter{question}
+\newcounter{partno}
+\newcounter{subpart}
+\newcounter{subsubpart}
+\newcounter{choice}
+%% Item labels for questions, parts, subparts and subsubparts
+\newcommand\questionlabel{\arabic{question}.}
+\newcommand\partlabel{(\alph{partno})}
+\newcommand\subpartlabel{(\roman{subpart})}
+\newcommand\subsubpartlabel{\alph{subsubpart}.}
+%% Questions
+\newenvironment{questions}{
+  \def\@queslevel{question}
+  \def\question{
+    \def\thequestiontitle{\questionname~thequestion}
+    \@checkqueslevel{question}
+    \item
+  }
+  \def\subpart{
+    \@checkqueslevel{subpart}
+    \item
+  }
+  \def\subsubpart{
+    \@checkqueslevel{subsubpart}
+    \item
+  }
+  \list{\questionlabel}{
+    \usecounter{question}
+    \settowidth{\leftmargin}{10.\hskip\labelsep}
+    \labelwidth\leftmargin\advance\labelwidth-\labelsep
+    \partopsep=0pt
+    \questionshook
+    }
+}{
+\endlist
+}
+%% Parts
+\newenvironment{parts}{
+\def\@queslevel{part}
+\def\part{
+     \@checkqueslevel{part}
+     \item
+}
+\list{\partlabel}{
+     \usecounter{partno}\def\makelabel##1{\hss\llap{##1}}
+     \settowidth{\leftmargin}{(m)\hskip\labelsep}
+     \labelwidth\leftmargin\advance\labelwidth-\labelsep
+     \topsep=0pt
+     \partopsep=0pt
+     \partshook
+}
+}{
+\endlist
+}
+%% Subparts
+\newenvironment{subparts}{
+\def\@queslevel{subpart}
+\list{\subpartlabel}{
+     \usecounter{subpart}\def\makelabel##1{\hss\llap{##1}}
+     \settowidth{\leftmargin}{vii.\hskip\labelsep}
+     \labelwidth\leftmargin\advance\labelwidth-\labelsep
+     \topsep=0pt
+     \partopsep=0pt
+     \subpartshook
+    }
+}{
+\endlist
+}
+%% Subsubparts
+\newenvironment{subsubparts}{
+\def\@queslevel{subsubpart}
+\list{\subsubpartlabel}{
+    \usecounter{subsubpart}\def\makelabel##1{\hss\llap{##1}}
+     \settowidth{\leftmargin}{($\psi$)\hskip\labelsep}
+     \labelwidth\leftmargin\advance\labelwidth-\labelsep
+     \topsep=0pt
+     \partopsep=0pt
+     \subsubpartshook
+    }
+}{
+\endlist
+}
+%% Choices
+\renewcommand\thechoice{\Alph{choice}.}
+\newcommand\choicelabel{\thechoice}
+\newif\if@correctchoice
+\@correctchoicefalse
+\newcommand\CorrectChoiceEmphasis[1]{
+\def\CorrectChoice@Emphasis{#1}
+}
+\CorrectChoiceEmphasis{\bfseries}
+\let\correctchoiceemphasis\CorrectChoiceEmphasis
+\newenvironment{choices}{
+\list{\choice@char}{
+\usecounter{choice}
+\settowidth{\leftmargin}{W.\hskip\labelsep}
+        \def\choice{
+        \if@correctchoice
+            \endgroup
+          \fi
+          \item
+}
+\def\CorrectChoice{
+\if@correctchoice
+        \endgroup
+        \fi
+        \if@noanswers
+\item
+\else
+\if@blankanswers
+\item
+\else
+\begingroup
+                 \@correctchoicetrue
+\CorrectChoice@Emphasis
+             \item[\chosen@char]
+     \fi
+\fi
+}
+\let\correctchoice\CorrectChoice
+        \topsep=2pt
+        \partopsep=0pt
+        \choiceshook
+}
+}{
+\if@correctchoice
+\endgroup
+\fi
+\endlist
+}
+%% Checkboxes
+\newenvironment{checkboxes}{
+\list{\checkbox@char}{
+\usecounter{choice}
+        \settowidth{\leftmargin}{W.\hskip\labelsep}
+        \def\choice{
+         \if@correctchoice
+            \endgroup
+          \fi
+\item
+}
+\def\CorrectChoice{
+         \if@correctchoice
+            \endgroup
+          \fi
+          \if@noanswers
+          \item
+\else
+\if@blankanswers
+\item
+\else
+\begingroup
+            \@correctchoicetrue
+            \CorrectChoice@Emphasis
+            \item[\checked@char]
+\fi
+\fi
+}
+       \let\correctchoice\CorrectChoice
+       \topsep=2pt
+       \partopsep=0pt
+       \checkboxeshook
+     }
+}{
+    \if@correctchoice
+        \endgroup
+    \fi
+    \endlist
+}
+%% Validatte nesting level
+\def\@checkqueslevel#1{
+  \begingroup
+    \def\@temp{#1}
+    \ifx\@temp\@queslevel
+      \null
+    \else
+      \ClassError{cmnotes}{
+        I found a #1 where I expected to find a \@queslevel
+        \MessageBreak
+      }{
+        Both #1 and \@queslevel \space can be used only inside the correct
+        \MessageBreak \space \space
+        environment and outside of any smaller environment
+        \MessageBreak
+      }
+    \fi
+  \endgroup
+}
+%% Move up one level
+\long\def\uplevel#1{
+  \par\bigskip
+  \vbox{
+    \leftskip=\@totalleftmargin
+    \advance\leftskip-\leftmargin
+    \advance\@totalleftmargin-\leftmargin
+    \advance\linewidth\leftmargin
+    #1
+  }
+  \nobreak
+}
+\endinput
+%%
+%% End of file `cmnotes.sty'.

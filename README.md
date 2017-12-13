@@ -1,5 +1,5 @@
 # Latex Tools
-This repository contains latex packages for typesetting lecture notes and exercise sheets, bilingual documents, and for in-house layouts and styles.
+This repository contains latex packages for typesetting lecture notes and exercise sheets, bilingual documents, in-house exam papers and in-house style definitions.
 
 | Tables        | Are           | Cool  |
 | ------------- |:-------------:| -----:|
@@ -7,6 +7,7 @@ This repository contains latex packages for typesetting lecture notes and exerci
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
 
+--- | ---
 | [cmnotes](tex/latex/cmnotes/)     | Lecture notes, handouts, exercises and quizzes. |
 | [cmlang](tex/latex/cmlang/)       | Bilingual documents |
 | [cmexam](tex/latex/cmexam/)       | CM exam papers |

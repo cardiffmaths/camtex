@@ -1,0 +1,518 @@
+%%
+%% This is file `camnotes.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% camnotes.dtx  (with options: `package')
+%% 
+%% Copyright (C) 2017 by Cardiff Maths
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.3 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%% 
+%%     http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3 or later is part of all distributions of
+%% LaTeX version 2005/12/01 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}[2005/12/01]
+\ProvidesPackage{camnotes}[2017/12/31 v1.0 For typesetting lecture notes (Cardiff Maths)]
+ %\end{center}
+%% Declare and process options
+\newif\ifcamnotes@blanks\camnotes@blanksfalse
+\newif\ifcamnotes@noproofs\camnotes@noproofsfalse
+\newif\ifcamnotes@blankproofs\camnotes@blankproofsfalse
+\newif\ifcamnotes@noanswers\camnotes@noanswersfalse
+\newif\ifcamnotes@blankanswers\camnotes@blankanswersfalse
+\newif\if@student\@studentfalse
+\DeclareOption{blanks}{\camnotes@blankstrue}
+\DeclareOption{noproofs}{\camnotes@noproofstrue}
+\DeclareOption{blankproofs}{\camnotes@blankproofstrue}
+\DeclareOption{noanswers}{\camnotes@noanswerstrue}
+\DeclareOption{blankanswers}{\camnotes@blankanswerstrue}
+\DeclareOption{student}{%
+\camnotes@blankstrue
+\camnotes@noproofstrue
+\camnotes@noanswerstrue
+}
+\ProcessOptions
+\relax
+%% Type out some useful information
+\typeout{---------------------}
+\ifcamnotes@blanks\typeout{blanks on}\fi
+\ifcamnotes@noproofs\typeout{no proofs}\fi
+\ifcamnotes@blankproofs\typeout{blank proofs}\fi
+\ifcamnotes@noanswers\typeout{no answers}\fi
+\ifcamnotes@blankanswers\typeout{blank answers}\fi
+\typeout{---------------------}
+%% Load all required packages
+\RequirePackage{amsmath,amsfonts,amssymb}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{newfloat}
+\RequirePackage{caption}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{xifthen}
+\RequirePackage{comment}
+\RequirePackage{environ}
+\RequirePackage{setspace}
+\RequirePackage{etoolbox}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable}
+\tcbuselibrary{skins}
+%% Set entity names (override these with camlang.sty)
+\let\proofname\@undefined
+\newcommand{\proofname}{Proof}
+\newcommand{\answername}{Answer}
+\newcommand{\solutionname}{Solution}
+%% Set default colours
+\newcommand{\camnotes@BackgroundColour}{white}
+\newcommand{\camnotes@TextColour}{black}
+\newcommand{\camnotes@ShowColour}{black}
+\newcommand{\camnotes@ProofColour}{black}
+\newcommand{\camnotes@SolutionColour}{black}
+\newcommand{\camnotes@AnswerColour}{black}
+\AtBeginDocument{
+    \color{\camnotes@TextColour}
+    \pagecolor{\camnotes@BackgroundColour}
+}
+%% Commands for setting custom colours
+\newcommand{\backgroundcolour}[1]{\renewcommand{\camnotes@BackgroundColour}{#1}}
+\newcommand{\textcolour}[1]{\renewcommand{\camnotes@TextColour}{#1}}
+\newcommand{\showcolour}[1]{\renewcommand{\camnotes@ShowColour}{#1}}
+\newcommand{\proofcolour}[1]{\renewcommand{\camnotes@ProofColour}{#1}}
+\newcommand{\solutioncolour}[1]{\renewcommand{\camnotes@SolutionColour}{#1}}
+\newcommand{\answercolour}[1]{\renewcommand{\camnotes@AnswerColour}{#1}}
+\newcommand{\camnotes@StretchFactor}{1}
+\newcommand{\setstretchfactor}[1]{\renewcommand{\camnotes@StretchFactor}{#1}}
+\newcommand{\camnotes@ImageStretchFactor}{1}
+\newcommand{\setimagestretchfactor}[1]{\renewcommand{\camnotes@ImageStretchFactor}{#1}}
+\newcommand{\camnotes@BoxRule}{0pt}
+\newcommand{\setboxrule}[1]{\renewcommand{\camnotes@BoxRule}{#1}}
+%% Internal titles
+\newcommand{\camnotes@BoxTitle}{}
+\newcommand{\camnotes@ProofTitle}{\proofname}
+\newcommand{\camnotes@SolutionTitle}{\solutionname}
+\newcommand{\camnotes@AnswerTitle}{\answername}
+\newcommand{\camnotes@makeboxtitle}{%
+\textcolor{\camnotes@TextColour}{\noindent\textbf{\camnotes@CurrentBoxTitle}:\enspace}
+}
+\newcommand{\camnotes@CurrentColour}{black}
+\newcommand{\camnotes@CurrentBoxRule}{0pt}
+\newcommand{\camnotes@CurrentBoxTitle}{}
+\newif\ifcamnotes@blankmode
+\camnotes@blankmodefalse
+\newif\ifcamnotes@blankimagemode
+\camnotes@blankimagemodefalse
+\newcommand{\blank}[1]{#1}
+\ifcamnotes@blanks
+    \renewtcbox{\blank}{
+     on line,
+     colback=\camnotes@BackgroundColour,
+     coltext={\ifcamnotes@blanks\camnotes@BackgroundColour\else\camnotes@ShowColour\fi},
+     boxrule={\ifcamnotes@blanks\camnotes@BoxRule\else0pt\fi}
+    }
+\fi
+\newenvironment{camnotes@tcbox}{%
+\begin{tcolorbox}[
+breakable,
+notitle,
+boxrule={\camnotes@BoxRule},
+colback={\camnotes@BackgroundColour},
+before={\smallskip},
+after={},
+coltext={\camnotes@CurrentColour},
+skin=enhanced,
+height fixed for = first and middle,
+ignore nobreak,
+flushleft upper
+]
+\begingroup
+}{
+\endgroup
+\end{tcolorbox}
+}
+\newenvironment{camnotes@basicbox}[1][]{
+\ifthenelse{\isempty{#1}}%
+{\renewcommand{\camnotes@CurrentBoxTitle}{}}%
+{\renewcommand{\camnotes@CurrentBoxTitle}{#1}}
+\ifcamnotes@blankmode
+\renewcommand{\camnotes@CurrentColour}{\camnotes@BackgroundColour}
+\setstretch{\camnotes@StretchFactor}
+\begin{camnotes@tcbox}
+\ifthenelse{\isempty{#1}}{}{\camnotes@makeboxtitle}
+\else
+\par
+\ifthenelse{\isempty{#1}}{}{\camnotes@makeboxtitle}
+\color{\camnotes@CurrentColour}
+\fi
+}{
+\ifcamnotes@blankmode
+\end{camnotes@tcbox}
+\setstretch{1}
+\fi
+\camnotes@blankmodefalse
+\color{\camnotes@TextColour}
+}
+\newenvironment{blankbox}{%
+\renewcommand{\camnotes@CurrentColour}{\camnotes@ShowColour}
+\ifcamnotes@blanks
+\camnotes@blankmodetrue
+\fi
+\begin{camnotes@basicbox}
+}{%
+\end{camnotes@basicbox}
+}
+\newenvironment{solution}{
+\renewcommand{\camnotes@CurrentColour}{\camnotes@SolutionColour}
+\ifcamnotes@blanks
+\camnotes@blankmodetrue
+\fi
+\begin{camnotes@basicbox}[\solutionname]
+}{
+\end{camnotes@basicbox}
+}
+\let\proof\@undefined
+\let\endproof\@undefined
+\ifcamnotes@noproofs
+\excludecomment{proof}
+\else
+\newenvironment{proof}{
+\renewcommand{\camnotes@CurrentColour}{\camnotes@ProofColour}
+\ifcamnotes@blankproofs
+\camnotes@blankmodetrue
+\fi
+\begin{camnotes@basicbox}[\proofname]
+}{
+\end{camnotes@basicbox}
+}
+\fi
+\ifcamnotes@noanswers
+\excludecomment{answer}
+\else
+\newenvironment{answer}{
+\renewcommand{\camnotes@CurrentColour}{\camnotes@AnswerColour}
+\ifcamnotes@blankanswers
+\camnotes@blankmodetrue
+\fi
+\begin{camnotes@basicbox}[\answername]
+}{
+\end{camnotes@basicbox}
+}
+\fi
+\newcommand{\bbx}[1]{\begin{blankbox}{#1}\end{blankbox}}
+\newcommand{\sol}[1]{\begin{solution}{#1}\end{solution}}
+\newcommand{\prf}[1]{\begin{proof}{#1}\end{proof}}
+\newcommand{\ans}[1]{\begin{answer}{#1}\end{answer}}
+\let\oldincludegraphics=\includegraphics
+\renewcommand\includegraphics[2][]{
+\ifcamnotes@blankmode
+\scalebox{\camnotes@ImageStretchFactor}{
+\phantom{\oldincludegraphics[#1]{#2}}
+}
+\else
+\oldincludegraphics[#1]{#2}
+\fi
+}
+\newlength\imageheight
+\newlength\imagewidth
+\newcommand{\altgraphics}[3][scale=1]{
+\ifcamnotes@blankmode
+\settoheight{\imageheight}{\oldincludegraphics[#1]{#2}}
+\settowidth{\imagewidth}{\oldincludegraphics[#1]{#2}}
+\scalebox{\camnotes@ImageStretchFactor}{
+\oldincludegraphics[height=\imageheight,width=\imagewidth,keepaspectratio]{#3}
+}
+\else
+\oldincludegraphics[#1]{#2}
+\fi
+}
+\newcommand{\blanktikz}{%
+\ifcamnotes@blankmode
+\tikzset{every picture/.style={
+scale=\camnotes@ImageStretchFactor,
+execute at end picture={
+\draw[fill=\camnotes@BackgroundColour] (current bounding box.south west) rectangle (current bounding box.north east);
+}}}
+\fi
+}
+\newif\ifcamnotes@globalblanks\camnotes@globalblanksfalse
+\ifcamnotes@blanks\camnotes@globalblankstrue\fi
+\newenvironment{blankson}{
+\camnotes@blankstrue
+\begingroup
+}{
+\endgroup
+\ifcamnotes@globalblanks\camnotes@blankstrue\else\camnotes@blanksfalse\fi
+}
+\newenvironment{blanksoff}{
+\camnotes@blanksfalse
+\begingroup
+}{
+\endgroup
+\ifcamnotes@globalblanks\camnotes@blankstrue\else\camnotes@blanksfalse\fi
+}
+\newif\ifcamnotes@globalnoproofs\camnotes@globalnoproofsfalse
+\newif\ifcamnotes@globalblankproofs\camnotes@globalblankproofsfalse
+\ifcamnotes@noproofs\camnotes@globalnoproofstrue\fi
+\ifcamnotes@blankproofs\camnotes@globalblankproofstrue\fi
+\newenvironment{proofson}{
+\camnotes@noproofsfalse
+\camnotes@blankproofsfalse
+\begingroup
+}{
+\endgroup
+\ifcamnotes@globalnoproofs\camnotes@noproofstrue\else\camnotes@noproofsfalse\fi
+\ifcamnotes@globalblankproofs\camnotes@blankproofstrue\else\camnotes@blankproofsfalse\fi
+}
+\newenvironment{proofsoff}{
+\camnotes@noproofstrue
+\begingroup
+}{
+\endgroup
+\ifcamnotes@globalnoproofs\camnotes@noproofstrue\else\camnotes@noproofsfalse\fi
+}
+\newif\ifcamnotes@globalnoanswers\camnotes@globalnoanswersfalse
+\newif\ifcamnotes@globalblankanswers\camnotes@globalblankanswersfalse
+\ifcamnotes@noanswers\camnotes@globalnoanswerstrue\fi
+\ifcamnotes@blankanswers\camnotes@globalblankanswerstrue\fi
+\newenvironment{answerson}{
+\camnotes@noanswersfalse
+\camnotes@blankanswersfalse
+\begingroup
+}{
+\endgroup
+\ifcamnotes@globalnoanswers\camnotes@noanswerstrue\else\camnotes@noanswersfalse\fi
+\ifcamnotes@globalblankanswers\camnotes@blankanswerstrue\else\camnotes@blankanswersfalse\fi
+}
+\newenvironment{answersoff}{
+\camnotes@noanswerstrue
+\begingroup
+}{
+\endgroup
+\ifcamnotes@globalnoanswers\camnotes@noanswerstrue\else\camnotes@noanswersfalse\fi
+}
+%% Commands to define symbols for choices and checkboxes
+\newcommand{\choicechar}[1]{\def\choice@char{#1}}
+\newcommand{\chosenchar}[1]{\def\chosen@char{#1}}
+\newcommand{\checkboxchar}[1]{\def\checkbox@char{#1}}
+\newcommand{\checkedchar}[1]{\def\checked@char{#1}}
+%% Set default symbols
+\newcommand{\bigsquare}{\raisebox{0.5ex}{\fbox{\phantom{\rule{0.5ex}{0.5ex}}}}}
+\choicechar{$\bigcirc$}
+\chosenchar{$\text{\rlap{\,$\checkmark$}}\bigcirc$}
+\checkboxchar{$\bigsquare$}
+\checkedchar{$\text{\rlap{\,\!$\checkmark$}}\bigsquare$}
+%% Hooks (for customization)
+\newcommand\questionshook{}
+\newcommand\partshook{}
+\newcommand\subpartshook{}
+\newcommand\subsubpartshook{}
+\newcommand\choiceshook{}
+\newcommand\checkboxeshook{}
+%% Counters
+\newcounter{question}
+\newcounter{partno}
+\newcounter{subpart}
+\newcounter{subsubpart}
+\newcounter{choice}
+%% Item labels for questions, parts, subparts and subsubparts
+\newcommand\questionlabel{\arabic{question}.}
+\newcommand\partlabel{(\alph{partno})}
+\newcommand\subpartlabel{(\roman{subpart})}
+\newcommand\subsubpartlabel{\alph{subsubpart}.}
+%% Questions
+\newenvironment{questions}{
+  \def\@queslevel{question}
+  \def\question{
+    \@checkqueslevel{question}
+    \item
+  }
+  \def\subpart{
+    \@checkqueslevel{subpart}
+    \item
+  }
+  \def\subsubpart{
+    \@checkqueslevel{subsubpart}
+    \item
+  }
+  \list{\questionlabel}{
+    \usecounter{question}
+    \settowidth{\leftmargin}{10.\hskip\labelsep}
+    \labelwidth\leftmargin\advance\labelwidth-\labelsep
+    \partopsep=0pt
+    \questionshook
+    }
+}{
+\endlist
+}
+%% Parts
+\newenvironment{parts}{
+\def\@queslevel{part}
+\def\part{
+     \@checkqueslevel{part}
+     \item
+}
+\list{\partlabel}{
+     \usecounter{partno}\def\makelabel##1{\hss\llap{##1}}
+     \settowidth{\leftmargin}{(m)\hskip\labelsep}
+     \labelwidth\leftmargin\advance\labelwidth-\labelsep
+     \topsep=0pt
+     \partopsep=0pt
+     \partshook
+}
+}{
+\endlist
+}
+%% Subparts
+\newenvironment{subparts}{
+\def\@queslevel{subpart}
+\list{\subpartlabel}{
+     \usecounter{subpart}\def\makelabel##1{\hss\llap{##1}}
+     \settowidth{\leftmargin}{vii.\hskip\labelsep}
+     \labelwidth\leftmargin\advance\labelwidth-\labelsep
+     \topsep=0pt
+     \partopsep=0pt
+     \subpartshook
+    }
+}{
+\endlist
+}
+%% Subsubparts
+\newenvironment{subsubparts}{
+\def\@queslevel{subsubpart}
+\list{\subsubpartlabel}{
+    \usecounter{subsubpart}\def\makelabel##1{\hss\llap{##1}}
+     \settowidth{\leftmargin}{($\psi$)\hskip\labelsep}
+     \labelwidth\leftmargin\advance\labelwidth-\labelsep
+     \topsep=0pt
+     \partopsep=0pt
+     \subsubpartshook
+    }
+}{
+\endlist
+}
+%% Choices
+\renewcommand\thechoice{\Alph{choice}.}
+\newcommand\choicelabel{\thechoice}
+\newif\if@correctchoice
+\@correctchoicefalse
+\newcommand\CorrectChoiceEmphasis[1]{
+\def\CorrectChoice@Emphasis{#1}
+}
+\CorrectChoiceEmphasis{\bfseries}
+\let\correctchoiceemphasis\CorrectChoiceEmphasis
+\newenvironment{choices}{
+\list{\choice@char}{
+\usecounter{choice}
+\settowidth{\leftmargin}{W.\hskip\labelsep}
+        \def\choice{
+        \if@correctchoice
+            \endgroup
+          \fi
+          \item
+}
+\def\CorrectChoice{
+\if@correctchoice
+        \endgroup
+        \fi
+        \ifcamnotes@noanswers
+\item
+\else
+\ifcamnotes@blankanswers
+\item
+\else
+\begingroup
+                 \@correctchoicetrue
+\CorrectChoice@Emphasis
+             \item[\chosen@char]
+     \fi
+\fi
+}
+\let\correctchoice\CorrectChoice
+        \topsep=2pt
+        \partopsep=0pt
+        \choiceshook
+}
+}{
+\if@correctchoice
+\endgroup
+\fi
+\endlist
+}
+%% Checkboxes
+\newenvironment{checkboxes}{
+\list{\checkbox@char}{
+\usecounter{choice}
+        \settowidth{\leftmargin}{W.\hskip\labelsep}
+        \def\choice{
+         \if@correctchoice
+            \endgroup
+          \fi
+\item
+}
+\def\CorrectChoice{
+         \if@correctchoice
+            \endgroup
+          \fi
+          \ifcamnotes@noanswers
+          \item
+\else
+\ifcamnotes@blankanswers
+\item
+\else
+\begingroup
+            \@correctchoicetrue
+            \CorrectChoice@Emphasis
+            \item[\checked@char]
+\fi
+\fi
+}
+       \let\correctchoice\CorrectChoice
+       \topsep=2pt
+       \partopsep=0pt
+       \checkboxeshook
+     }
+}{
+    \if@correctchoice
+        \endgroup
+    \fi
+    \endlist
+}
+%% Validatte nesting level
+\def\@checkqueslevel#1{
+  \begingroup
+    \def\@temp{#1}
+    \ifx\@temp\@queslevel
+      \null
+    \else
+      \ClassError{camnotes}{
+        I found a #1 where I expected to find a \@queslevel
+        \MessageBreak
+      }{
+        Both #1 and \@queslevel \space can be used only inside the correct
+        \MessageBreak \space \space
+        environment and outside of any smaller environment
+        \MessageBreak
+      }
+    \fi
+  \endgroup
+}
+%% Move up one level
+\long\def\uplevel#1{
+  \par\bigskip
+  \vbox{
+    \leftskip=\@totalleftmargin
+    \advance\leftskip-\leftmargin
+    \advance\@totalleftmargin-\leftmargin
+    \advance\linewidth\leftmargin
+    #1
+  }
+  \nobreak
+}
+\endinput
+%%
+%% End of file `camnotes.sty'.

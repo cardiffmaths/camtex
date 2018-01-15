@@ -1,0 +1,211 @@
+% filename: camstyle.sty
+\NeedsTeXFormat{LaTeX2e}
+\def\fileversion{1.0}
+\def\filedate{2014/08/28}
+\ProvidesPackage{camstyle}[\filedate \space v\fileversion \space (de)]
+\ProvidesFile{camstyle.sty}[\filedate \space v\fileversion \space (de)]
+
+% options
+\newif\if@slides\@slidesfalse
+\DeclareOption{slides}{\@slidestrue}
+\ProcessOptions
+\relax
+
+% module info
+\newcommand{\theinstitution}{}
+\newcommand{\thedepartment}{}
+\newcommand{\themodulecode}{}
+\newcommand{\themoduletitle}{}
+\newcommand{\themoduleterm}{}
+\newcommand{\theacademicyear}{}
+\newcommand{\themsccodes}{}
+\newcommand{\institution}[1]{\renewcommand{\theinstitution}{#1}}
+\newcommand{\department}[1]{\renewcommand{\thedepartment}{#1}}
+\newcommand{\modulecode}[1]{\renewcommand{\themodulecode}{#1}}
+\newcommand{\moduletitle}[1]{\renewcommand{\themoduletitle}{#1}}
+\newcommand{\moduleterm}[1]{\renewcommand{\themoduleterm}{#1}}
+\newcommand{\academicyear}[1]{\renewcommand{\theacademicyear}{#1}}
+\newcommand{\msccodes}[1]{\renewcommand{\themsccodes}{#1}}
+
+% basic
+\RequirePackage[english]{isodate}
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+
+% layout
+\RequirePackage[margin=30mm, a4paper]{geometry}
+\setlength{\parindent}{0ex}
+\setlength{\parskip}{1ex}
+
+% headings
+\RequirePackage[pagestyles]{titlesec}
+\RequirePackage{titletoc}
+\newpagestyle{main}[\small\scshape]{
+	\sethead{\themodulecode}{}{\themoduleterm} 
+	\setfoot{}{\thepage}{}
+}
+\newpagestyle{markingform}[\small\scshape]{
+	\sethead{\theinstitution}{}{\thedepartment} 
+	\setfoot{}{}{}
+}
+\newpagestyle{frontmatter}[\small\scshape]{
+	\sethead{}{}{} 
+	\setfoot{}{\thepage}{}
+}
+\titleformat{\chapter}{\normalfont\huge\bfseries}{\chaptername~\thechapter}{1em}{}
+\titleformat{\section}[block]{\normalfont\Large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}[block]{\normalfont\large\bfseries}{\thesubsection}{1em}{}[\titlerule]
+
+\@ifclassloaded{article}{%
+	\renewcommand{\maketitle}{\makeArticleTitle}
+}{%
+	\renewcommand{\maketitle}{\makeBookTitle}
+}
+
+% theorems
+\RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
+\theoremstyle{break}
+\theorembodyfont{\upshape}
+\setlength\theorempreskipamount{3ex}
+\setlength\theorempostskipamount{2ex}
+\qedsymbol{\rule{1ex}{1ex}}
+\@ifclassloaded{article}{%
+	\newtheorem{theorem}{Theorem}
+}{%
+	\newtheorem{theorem}{Theorem}[chapter]
+}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{quiz}[theorem]{Quiz}
+
+
+\@ifclassloaded{article}{}{\renewcommand{\thetheorem}{\arabic{chapter}.\arabic{theorem}}}
+
+% figures
+\RequirePackage{graphicx}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+\captionsetup[subfigure]{labelformat=empty}
+\captionsetup[figure]{skip=2ex}
+\graphicspath{{./figures/}}
+\DeclareGraphicsExtensions{.png,.pdf,.jpeg}
+
+% tables
+\RequirePackage{array}
+\addtolength{\tabcolsep}{1ex}
+\renewcommand{\arraystretch}{1.3}
+
+% clear empty pages
+\RequirePackage{emptypage}
+
+% hyperref (always load last)
+\RequirePackage[pdftex]{hyperref}
+\hypersetup{%
+	breaklinks=true,
+    bookmarks=true,
+	pdfstartview=Fit,
+    pdfborder={0 0 0}
+}
+
+%-------------------------------------------------
+% slides version (beta)
+\if@slides
+
+	% layout
+	\geometry{a4paper,landscape}
+	\geometry{left=15mm,right=15mm,top=18mm,bottom=18mm}
+	
+	% fonts
+	\renewcommand{\familydefault}{\sfdefault}
+	\RequirePackage[T1]{fontenc}
+	\RequirePackage{lmodern}
+	\RequirePackage{exscale} 
+	\RequirePackage{scrextend}
+	\changefontsizes{16pt}
+
+	% spacing
+	\renewcommand\baselinestretch{1.1}
+	\setlength{\parskip}{0.5ex}
+	\setlength{\parindent}{0ex}
+	\addtolength{\topskip}{4ex}
+	\addtolength{\tabcolsep}{1ex}
+	\renewcommand{\arraystretch}{1.3}
+	\addtolength{\arraycolsep}{0.5ex}
+	
+	% title
+	\renewcommand{\maketitle}{\makeSlidesTitle}
+
+\fi
+%-------------------------------------------------
+
+%-------------------------------------------------
+% titles
+%\newcommand{\makeArticleTitle}{}
+%\newcommand{\makeBookTitle}{}
+%\newcommand{\makeSlidesTitle}{}
+
+% article title
+\newcommand{\makeArticleTitle}{%
+	\pagestyle{frontmatter}
+	\begin{center}
+	\scshape
+	\large \theinstitution \hfill \thedepartment \\
+	\huge  \themodulecode~\themoduletitle \\
+	\large \@title \\
+	\large \@author \\
+	\large \themoduleterm 
+	\footnote{\small\texttt{Version: \today}}
+	\normalsize
+	\end{center}
+}
+
+% book title
+\newcommand{\makeBookTitle}{%
+	\pagestyle{frontmatter}
+    \thispagestyle{empty}
+	\begin{center}
+	\scshape
+	\large \theinstitution \hfill \thedepartment \\[16ex]
+	\huge  \themodulecode \\ [4ex]
+	\huge  \themoduletitle \\ [8ex]
+	\huge  \@title \\[6ex]
+	\LARGE \themoduleterm 
+	\end{center}
+	\vfill
+	\small\texttt{\@author\hfill Version: \today}
+	\flushleft
+	\normalsize
+}
+
+% slides title
+\newcommand{\makeSlidesTitle}{%
+	\pagestyle{frontmatter}
+    \thispagestyle{empty}
+	\begin{center}
+		\scshape
+		\Large 
+		\@ifundefined{theinstitution}{\mbox{}}{\theinstitution \\[5ex]}
+		\@ifundefined{thedepartment}{\mbox{}}{\thedepartment \\[5ex]}
+		\@ifundefined{themodulecode}{\mbox{}}{\themodulecode \\ [1ex]}
+		\@ifundefined{themoduletitle}{\mbox{}}{\themoduletitle \\[5ex]}
+		\@ifundefined{themoduleterm}{\mbox{}}{\themoduleterm \\}
+		\@ifundefined{thebooktitle}{\mbox{}}{\thebooktitle \\[1ex]}
+		\@ifundefined{theacademicyear}{\mbox{}}{\theacademicyear} \\
+	\end{center}
+	\vfill
+	\normalsize
+	\raggedleft
+	\texttt{Version: \today}
+	\flushleft
+}
+%-------------------------------------------------
+
+
+
+\endinput

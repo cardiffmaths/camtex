@@ -1,0 +1,42 @@
+% mandelbrot.tex
+\PassOptionsToPackage{en}{cambi}
+%\PassOptionsToPackage{cy}{cambi}
+
+\documentclass{article}
+
+\usepackage{cambi}
+
+\usepackage[margin=0cm, papersize={10cm, 9cm}]{geometry}
+\setlength{\parindent}{0ex}
+\pagestyle{empty}
+
+\usepackage{graphicx}
+\graphicspath{{./figures/}}
+\usepackage[font=small]{caption}
+
+%------------------------------------------------
+\begin{document}
+\section*{\en The Mandelbrot Set \cy Set Mandelbrot}
+
+\en Consider the following iterated system,
+\cy Ystyriwch y system ailadroddol ganlynol,
+
+\[
+z_{n+1} = z_n^2 + c \quad\text{\en with\cy gyda}\quad z_0 = 0.
+\]
+
+\eng{The Mandelbrot set is the set of complex numbers $c$ for which $z_n$ does not diverge to infinity as $n\to\infty$.}
+\cym{Set Mandelbrot yw'r set o rifau cymhlyg $c$ sydd fel nad ydyw $z_n$ yn dargyfeirio at anfeidredd pan mae $n\to\infty$.}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.2]{mandelbrotset}
+\footnotesize\caption{\eng{The Mandelbrot set}\cym{Set Mandelbrot}}
+\end{figure}
+
+\en The elaborate boundary of the set is infinitely complex and exhibits self-similarity, and is therefore a fractal object.
+\cy Mae ffin goeth y set yn anfeidrol gymhleth ac yn dangos hunan-guflunedd, ac mae felly yn wrthrych ffractal.
+
+\end{document}
+
+

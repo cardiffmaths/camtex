@@ -1,0 +1,157 @@
+% cambi_test.tex
+\PassOptionsToPackage{en}{cambi}
+\PassOptionsToPackage{cy}{cambi}
+
+\documentclass{article}
+
+\usepackage{cambi}
+
+\usepackage[a4paper,margin=20mm]{geometry}
+\setlength{\parindent}{0ex}
+\setlength{\parskip}{1ex}
+
+\title{\mbox{}\en Multilingual Tools for \LaTeX\ \cy Offer Amlieithyddol ar gyfer \LaTeX\ }
+\author{Dafydd Evans}
+
+%===============================================================
+\begin{document}
+\maketitle
+
+\begin{abstract}\noindent
+The {\tt culang} package provided macros and environments for maintaining a single bilngual source file for which each version can be typeset separately. The main contribution is to define the marks \verb+\en+, \verb+\cy+ and \verb+\bi+ to switch between English, Welsh and bilngual language modes. Unmarked text will appear in all versions of the document.
+\end{abstract}
+
+%--------------------
+\subsection*{\en Preface \cy Rhagair}
+
+{\tt cambi.sty}: 
+\cy Offer amlieithyddol ar gyfer \LaTeX\ 
+\en Multilingual tools for \LaTeX
+
+%----------------------------------------
+\section{\en Macros \cy Macroau}
+
+\en There are three macros\cy Mae tri macro\bi: 
+\begin{itemize}
+\item \verb+\eng{...}+, 
+\item \verb+\wel{...}+ \bil{and}{a}
+\item \verb+\bil{...}{...}+.
+\end{itemize}
+
+\en Test: \cy Prawf:\bi
+\begin{enumerate}
+\item \eng{This is the English version.}\wel{Dyma'r fersiwn Gymraeg.}
+\item \bil{This is the English version.}{Dyma'r fersiwn Gymraeg.}
+\end{enumerate}
+
+%----------------------------------------
+\section{\bil{Environments}{Amgylcheddau}}
+
+\begin{english}
+Contents of a \verb+\begin{english}...\end{english}+ environment.
+\end{english}
+
+\begin{welsh}
+Cynnyws amgylchedd \verb+\begin{welsh}...\end{welsh}+.
+\end{welsh}
+
+\begin{cymraeg}
+Cynnyws amgylchedd \verb+\begin{cymraeg}...\end{cymraeg}+.
+\end{cymraeg}
+
+%----------------------------------------
+\section{\eng{Theorems}\wel{Theoremau}}
+The welsh {\tt babel} language definitions cover basic macros (e.g. \verb+\abstractname+, \verb+\bibname+). The \verb+cambi+ package adds language definitions for theorem names and miscellaneous others.
+
+\begin{theorem}
+{\en There are infinitely many prime numbers.\cy Mae nifer anfeidrol o rifau cysefin.}
+\end{theorem}	
+
+\begin{exercise}
+\en Simplify the expression \cy Symleiddiwch y mynegiant $x^2-2x+1$.
+\end{exercise}	
+
+
+%----------------------------------------
+\section{\en Marks \cy Marciau}
+
+The syntax \verb+{\bf bold text}+ is often more convenient than \verb+\textbf{bold text}+. 
+
+We define \verb+\cy+ and \verb+\en+ to switch between the two languages.
+
+\begin{itemize}
+\item \verb+\cy+ switches the language mode to Cymraeg (Welsh).
+\item \verb+\en+ switches the language mode to English.
+\item Unmarked text will appear in all versions of the document. 
+\item An explicit closing mark (\verb+\bi+) switches back to the `common' state.
+\item The effect of \verb+\cy+ and \verb+\en+ is also terminated by \verb+\ {, }, $+ and newline. 
+\end{itemize}
+
+%----------------------------------------
+\section{\eng{Marks test}\cym{Prawf marciau}}
+
+\en Please see the source file for more details.
+\cy Gweler y ffeil ffynhonnell am fwy o fanylion.
+
+% Welsh version
+\welshon % overrides package option
+\subsection*{\cy Y fersiwn Gymraeg \en The English version}
+
+\bigskip\hrule\bigskip
+
+start \cy Helo Byd! \en Hello World! \cy Hwyl fawr! \en Goodbye! $\alpha$ end.
+
+\bigskip\hrule\bigskip
+
+start \en Hello World! \cy Helo Byd! \en Goodbye! \cy Hwyl fawr! $\alpha$ end.
+
+\bigskip\hrule\bigskip
+
+\cy Helo Byd! \en Hello World! \cy Hwyl fawr! \en Goodbye!
+Next char.
+
+Next line.
+
+% English version
+\welshoff % overrides package option
+\subsection*{\cy Y fersiwn Gymraeg \en The English version}
+
+\bigskip\hrule\bigskip
+
+start \cy Helo Byd! \en Hello World! \cy Hwyl fawr! \en Goodbye! $\alpha$ end.
+
+\bigskip\hrule\bigskip
+
+start \en Hello World! \cy Helo Byd! \en Goodbye! \cy Hwyl fawr! $\alpha$ end.
+
+\bigskip\hrule\bigskip
+
+% hack: this needs a \strut at the beginning again!
+\strut\cy Helo Byd! \en Hello World! \cy Hwyl fawr! \en Goodbye!
+Next char.
+
+Next line.
+
+% reset to the chosen language
+\resetlanguage
+
+% the end
+\bigskip
+\hrule
+\bigskip
+\begin{center}\Large\scshape
+\strut\en The End\cy Y Diwedd \bi
+\normalsize\normalfont\end{center}
+\bigskip
+\hrule
+
+\end{document}
+
+
+
+
+
+
+
+
+

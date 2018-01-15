@@ -1,6 +1,6 @@
 ## misc
 .DS_Store
-.cut
+*.cut
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

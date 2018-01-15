@@ -1,5 +1,6 @@
-## Mac stuff
+## misc
 .DS_Store
+.cut
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

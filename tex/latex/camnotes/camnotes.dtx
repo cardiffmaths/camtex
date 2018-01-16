@@ -70,7 +70,7 @@
 % \DoNotIndex{\leftmargin,\leftskip,\linewidth}
 %
 % \title{The \textsf{camnotes} package (\fileversion)}
-% \author{Dafydd Evans and David McConnell\\ \texttt{\small \{evansd8, mcconnelld\}@cf.ac.uk}}
+% \author{Dafydd Evans and David McConnell\\ \texttt{\small \{evansd8,mcconnelld\}@cf.ac.uk}}
 %
 % \maketitle
 %
@@ -329,7 +329,7 @@
 \newcommand{\camnotes@SolutionTitle}{\solutionname}
 \newcommand{\camnotes@AnswerTitle}{\answername}
 \newcommand{\camnotes@makeboxtitle}{%
-	\textcolor{\camnotes@TextColour}{\noindent\textbf{\camnotes@CurrentBoxTitle}:\enspace}
+	\textcolor{\camnotes@TextColour}{\noindent\textbf{\camnotes@CurrentBoxTitle}\smallbreak}
 }
 %    \end{macrocode}
 %
@@ -422,6 +422,26 @@
 	\camnotes@blankmodefalse
 	\color{\camnotes@TextColour}
 }
+\newenvironment{camnotes@framedbox}[1][]{
+	\ifthenelse{\isempty{#1}}%
+		{\renewcommand{\camnotes@CurrentBoxTitle}{}}%
+		{\renewcommand{\camnotes@CurrentBoxTitle}{#1}}
+	\ifcamnotes@blankmode
+		\renewcommand{\camnotes@CurrentColour}{\camnotes@BackgroundColour}
+		\setstretch{\camnotes@StretchFactor}
+	\else
+		\color{\camnotes@CurrentColour}
+	\fi
+	\begin{camnotes@tcbox}
+	\ifthenelse{\isempty{#1}}{}{\camnotes@makeboxtitle}
+}{
+	\end{camnotes@tcbox}    
+	\ifcamnotes@blankmode
+		\setstretch{1}
+	\fi
+	\camnotes@blankmodefalse
+	\color{\camnotes@TextColour}
+}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -448,9 +468,9 @@
 	\ifcamnotes@blanks
 		\camnotes@blankmodetrue
 	\fi
-	\begin{camnotes@basicbox}[\solutionname]
+	\begin{camnotes@framedbox}[\solutionname]
 }{
-	\end{camnotes@basicbox}    
+	\end{camnotes@framedbox}    
 }
 %    \end{macrocode}
 % \end{environment}
@@ -487,9 +507,9 @@
 		\ifcamnotes@blankanswers
 			\camnotes@blankmodetrue
 		\fi
-		\begin{camnotes@basicbox}[\answername]
+		\begin{camnotes@framedbox}[\answername]
 	}{
-		\end{camnotes@basicbox}
+		\end{camnotes@framedbox}
 	}
 \fi
 %    \end{macrocode}
@@ -564,6 +584,41 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% % \begin{macro}{\blankgraphics}
+% If the `blanks' option is used, the image is replaced with blank space of the same size. 
+%    \begin{macrocode}
+\newcommand{\blankgraphics}[2][scale=1]{
+    \ifcamnotes@blankmode
+    	\scalebox{\camnotes@ImageStretchFactor}{\phantom{\oldincludegraphics[#1]{#2}}}
+    \else
+    	\oldincludegraphics[#1]{#2}
+    \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\hidegraphics}
+% \begin{macro}{\showgraphics}
+% To manually specify different dimensions for the `blank' and `full' versions of an image
+%    \begin{macrocode}
+\newcommand{\hidegraphics}[2][scale=1]{
+    \ifcamnotes@blankmode
+    	\oldincludegraphics[#1]{#2}
+    \else
+    	\null
+    \fi
+}
+\newcommand{\showgraphics}[2][scale=1]{
+    \ifcamnotes@blankmode
+    	\null
+    \else
+    	\oldincludegraphics[#1]{#2}
+    \fi
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+
 %
 %\subsection{Local options}
 %

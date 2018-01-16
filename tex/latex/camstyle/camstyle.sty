@@ -62,27 +62,27 @@
 	\renewcommand{\maketitle}{\makeBookTitle}
 }
 
-% theorems
-\RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
-\theoremstyle{break}
-\theorembodyfont{\upshape}
-\setlength\theorempreskipamount{3ex}
-\setlength\theorempostskipamount{2ex}
-\qedsymbol{\rule{1ex}{1ex}}
-\@ifclassloaded{article}{%
-	\newtheorem{theorem}{Theorem}
-}{%
-	\newtheorem{theorem}{Theorem}[chapter]
-}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{condition}[theorem]{Condition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{exercise}[theorem]{Exercise}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{quiz}[theorem]{Quiz}
+%% theorems
+%\RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
+%\theoremstyle{break}
+%\theorembodyfont{\upshape}
+%\setlength\theorempreskipamount{3ex}
+%\setlength\theorempostskipamount{2ex}
+%\qedsymbol{\rule{1ex}{1ex}}
+%\@ifclassloaded{article}{%
+%	\newtheorem{theorem}{Theorem}
+%}{%
+%	\newtheorem{theorem}{Theorem}[chapter]
+%}
+%\newtheorem{definition}[theorem]{Definition}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{condition}[theorem]{Condition}
+%\newtheorem{example}[theorem]{Example}
+%\newtheorem{exercise}[theorem]{Exercise}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{remark}[theorem]{Remark}
+%\newtheorem{quiz}[theorem]{Quiz}
 
 
 \@ifclassloaded{article}{}{\renewcommand{\thetheorem}{\arabic{chapter}.\arabic{theorem}}}

@@ -98,7 +98,7 @@
 \newcommand{\camnotes@SolutionTitle}{\solutionname}
 \newcommand{\camnotes@AnswerTitle}{\answername}
 \newcommand{\camnotes@makeboxtitle}{%
-\textcolor{\camnotes@TextColour}{\noindent\textbf{\camnotes@CurrentBoxTitle}:\enspace}
+\textcolor{\camnotes@TextColour}{\noindent\textbf{\camnotes@CurrentBoxTitle}\smallbreak}
 }
 \newcommand{\camnotes@CurrentColour}{black}
 \newcommand{\camnotes@CurrentBoxRule}{0pt}
@@ -157,6 +157,26 @@ flushleft upper
 \camnotes@blankmodefalse
 \color{\camnotes@TextColour}
 }
+\newenvironment{camnotes@framedbox}[1][]{
+\ifthenelse{\isempty{#1}}%
+{\renewcommand{\camnotes@CurrentBoxTitle}{}}%
+{\renewcommand{\camnotes@CurrentBoxTitle}{#1}}
+\ifcamnotes@blankmode
+\renewcommand{\camnotes@CurrentColour}{\camnotes@BackgroundColour}
+\setstretch{\camnotes@StretchFactor}
+\else
+\color{\camnotes@CurrentColour}
+\fi
+\begin{camnotes@tcbox}
+\ifthenelse{\isempty{#1}}{}{\camnotes@makeboxtitle}
+}{
+\end{camnotes@tcbox}
+\ifcamnotes@blankmode
+\setstretch{1}
+\fi
+\camnotes@blankmodefalse
+\color{\camnotes@TextColour}
+}
 \newenvironment{blankbox}{%
 \renewcommand{\camnotes@CurrentColour}{\camnotes@ShowColour}
 \ifcamnotes@blanks
@@ -171,9 +191,9 @@ flushleft upper
 \ifcamnotes@blanks
 \camnotes@blankmodetrue
 \fi
-\begin{camnotes@basicbox}[\solutionname]
+\begin{camnotes@framedbox}[\solutionname]
 }{
-\end{camnotes@basicbox}
+\end{camnotes@framedbox}
 }
 \let\proof\@undefined
 \let\endproof\@undefined
@@ -198,9 +218,9 @@ flushleft upper
 \ifcamnotes@blankanswers
 \camnotes@blankmodetrue
 \fi
-\begin{camnotes@basicbox}[\answername]
+\begin{camnotes@framedbox}[\answername]
 }{
-\end{camnotes@basicbox}
+\end{camnotes@framedbox}
 }
 \fi
 \newcommand{\bbx}[1]{\begin{blankbox}{#1}\end{blankbox}}
@@ -239,6 +259,28 @@ execute at end picture={
 }}}
 \fi
 }
+\newcommand{\blankgraphics}[2][scale=1]{
+    \ifcamnotes@blankmode
+     \scalebox{\camnotes@ImageStretchFactor}{\phantom{\oldincludegraphics[#1]{#2}}}
+    \else
+     \oldincludegraphics[#1]{#2}
+    \fi
+}
+\newcommand{\hidegraphics}[2][scale=1]{
+    \ifcamnotes@blankmode
+     \oldincludegraphics[#1]{#2}
+    \else
+     \null
+    \fi
+}
+\newcommand{\showgraphics}[2][scale=1]{
+    \ifcamnotes@blankmode
+     \null
+    \else
+     \oldincludegraphics[#1]{#2}
+    \fi
+}
+
 \newif\ifcamnotes@globalblanks\camnotes@globalblanksfalse
 \ifcamnotes@blanks\camnotes@globalblankstrue\fi
 \newenvironment{blankson}{

@@ -1,4 +1,4 @@
-# Latex Tools
+# CamTeX
 This repository contains latex packages for typesetting lecture notes and exercise sheets, bilingual documents, in-house exam papers and in-house style definitions.
 
 | Package                             | Description                                     |

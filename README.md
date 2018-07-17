@@ -5,6 +5,6 @@ This repository contains latex packages for typesetting lecture notes and exerci
 | ---------------------------------   | ------------------------------------------------|
 | [camnotes](tex/latex/camnotes/)     | Lecture notes, handouts, exercises and quizzes. |
 | [cambi](tex/latex/cambi/)           | Bilingual documents                             |
-| [camexam](tex/latex/camexam/)       | CaM exam papers                                 |
-| [camstyle](tex/latex/camstyle/)     | CaM style definitions                           | 
+| [camexam](tex/latex/camexam/)       | Exam papers                                     |
+| [camstyle](tex/latex/camstyle/)     | Style definitions .                             | 
 
